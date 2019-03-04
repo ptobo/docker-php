@@ -15,8 +15,8 @@ RUN ACCEPT_EULA=Y yum -y install msodbcsql17-17.2.0.1-1 mssql-tools-17.2.0.1-1
 RUN yum -y install unixODBC-devel
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
-RUN extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/30-pdo_sqlsrv.ini
-RUN extension=sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/20-sqlsrv.ini
+RUN echo extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/30-pdo_sqlsrv.ini
+RUN echo extension=sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/20-sqlsrv.ini
 
 RUN sed -i 's/\(^;cgi.fix_pathinfo=\).*/cgi.fix_pathinfo=0/' /etc/php.ini
 RUN sed -i 's/\(^listen = 127.0.0.1:9000\).*/listen = \/var\/run\/php-fpm\/php-fpm.sock/' /etc/php-fpm.d/www.conf
