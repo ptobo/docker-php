@@ -18,6 +18,14 @@ RUN pecl install pdo_sqlsrv
 RUN echo extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/30-pdo_sqlsrv.ini
 RUN echo extension=sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/20-sqlsrv.ini
 
+RUN pecl install xdebug
+RUN echo zend_extension=xdebug.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-xdebug.ini
+RUN echo xdebug.default_enable=1 >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-xdebug.ini
+RUN echo xdebug.remote_enable=1 >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-xdebug.ini
+RUN echo xdebug.profiler_enable=1 >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-xdebug.ini
+RUN echo xdebug.remote_host=host.docker.internal >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-xdebug.ini
+RUN echo xdebug.remote_log=xdebug.log >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/40-xdebug.ini
+
 RUN sed -i 's/\(^;cgi.fix_pathinfo=\).*/cgi.fix_pathinfo=0/' /etc/php.ini
 RUN sed -i 's/\(^listen = 127.0.0.1:9000\).*/listen = \/var\/run\/php-fpm\/php-fpm.sock/' /etc/php-fpm.d/www.conf
 RUN sed -i 's/\(^;listen.owner =\).*/listen.owner = nginx/' /etc/php-fpm.d/www.conf
@@ -49,5 +57,6 @@ RUN chmod 777 /var/lib/php/session
 RUN ln -s /dev/stdout /var/log/nginx/access.log
 RUN ln -s /dev/stderr /var/log/nginx/error.log
 RUN ln -s /dev/stderr /var/log/php-fpm/error.log
+RUN ln -s /dev/stderr /var/log/xdebug.log
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
