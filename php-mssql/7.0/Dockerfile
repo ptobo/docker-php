@@ -1,4 +1,4 @@
-FROM centos
+FROM centos:7
 
 MAINTAINER "Pedro Tobo" <pedrotobo@gmail.com>
 
